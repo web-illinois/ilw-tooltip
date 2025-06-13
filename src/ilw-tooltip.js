@@ -1,8 +1,8 @@
 import { LitElement, html, unsafeCSS } from "lit";
-import styles from './<%= name %>.styles.css?inline';
-import './<%= name %>.css';
+import styles from './ilw-tooltip.styles.css?inline';
+import './ilw-tooltip.css';
 
-class <%= _.upperFirst(_.camelCase(name.slice(4))) %> extends LitElement {
+class Tooltip extends LitElement {
 
     static get properties() {
         return {
@@ -28,4 +28,4 @@ class <%= _.upperFirst(_.camelCase(name.slice(4))) %> extends LitElement {
     }
 }
 
-customElements.define('<%= name %>', <%= _.upperFirst(_.camelCase(name.slice(4))) %>);
+customElements.define('ilw-tooltip', Tooltip);
