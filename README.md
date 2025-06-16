@@ -13,7 +13,7 @@ The default color background color is white, there is also a blue option for the
 
 The default position for the arrow is bottom left by default, but can be changed.
 
-There is a slot for the tooltip title.
+There is an optional slot for the tooltip title.
 
 ### Attributes
 * id: The id of the tooltip is required. This is used to trigger the tooltip from a button or link. The default is `tooltip`. The ID must be unique on the page.
