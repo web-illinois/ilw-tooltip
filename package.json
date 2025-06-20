@@ -1,10 +1,10 @@
 {
     "name": "@illinois-toolkit/ilw-tooltip",
-    "description": "One paragraph description of the component.",
+    "description": "Ilw-tooltip is a popup that provides additional information about a user interface element, such as a button or link, when the mouse hovers over it.",
     "repository": "github:web-illinois/ilw-tooltip",
     "private": false,
     "license": "MIT",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "type": "module",
     "files": [
         "src/**",

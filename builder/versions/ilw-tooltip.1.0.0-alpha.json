@@ -5,6 +5,7 @@
     "type": "web component",
     "element-name": "ilw-tooltip",
     "description": "Ilw-tooltip is a popup that provides additional information about a user interface element, such as a button or link, when the mouse hovers over it.",
+    "builder-version": "1.0-alpha",
     "version": "1.0.0-alpha",
     "date": "06/18/2025",
     "css": "https://dev.toolkit.illinois.edu/ilw-tooltip/1.0.0-alpha/ilw-tooltip.css",
