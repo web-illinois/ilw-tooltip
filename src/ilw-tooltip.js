@@ -33,9 +33,8 @@ class Tooltip extends LitElement {
         const content = this.querySelector('[slot="content"]');
 
         if (trigger && content) {
+            // Create accessible label
             const tooltipId = 'tooltip-content-' + Math.random().toString(36).substring(2, 10);
-
-            // Mirror content to aria-describedby using hidden element in light DOM
             const srText = document.createElement('div');
             srText.id = tooltipId;
             srText.className = 'visually-hidden';
@@ -43,9 +42,7 @@ class Tooltip extends LitElement {
             this.appendChild(srText);
 
             trigger.setAttribute('aria-describedby', tooltipId);
-            if (!trigger.hasAttribute('tabindex')) {
-                trigger.setAttribute('tabindex', '0');
-            }
+            trigger.setAttribute('tabindex', trigger.getAttribute('tabindex') || '0');
 
             trigger.addEventListener('mouseenter', this._showTooltip.bind(this));
             trigger.addEventListener('mouseleave', this._hideTooltip.bind(this));
@@ -55,7 +52,6 @@ class Tooltip extends LitElement {
 
         document.addEventListener('keydown', this._onEscape.bind(this));
     }
-
 
     disconnectedCallback() {
         super.disconnectedCallback();
@@ -68,75 +64,74 @@ class Tooltip extends LitElement {
         this._positionTooltip();
     }
 
-    _positionTooltip() {
-        const trigger = this.querySelector('[slot="trigger"]');
-        const tooltip = this.shadowRoot.querySelector('.tooltip');
-        if (!trigger || !tooltip) return;
-
-        const offset = 12;
-        const arrow = this.getAttribute('arrow') || 'top-center';
-
-        const triggerRect = trigger.getBoundingClientRect();
-        const hostRect = this.getBoundingClientRect();
-
-        let top, left;
-
-        switch (arrow) {
-            case 'left':
-                top = trigger.offsetTop + (trigger.offsetHeight - tooltip.offsetHeight) / 2;
-                left = trigger.offsetLeft - tooltip.offsetWidth - offset;
-                break;
-            case 'right':
-                top = trigger.offsetTop + (trigger.offsetHeight - tooltip.offsetHeight) / 2;
-                left = trigger.offsetLeft + trigger.offsetWidth + offset;
-                break;
-            case 'bottom-center':
-                top = trigger.offsetTop + trigger.offsetHeight + offset;
-                left = trigger.offsetLeft + (trigger.offsetWidth - tooltip.offsetWidth) / 2;
-                break;
-            case 'bottom-left':
-                top = trigger.offsetTop + trigger.offsetHeight + offset;
-                left = trigger.offsetLeft;
-                break;
-            case 'bottom-right':
-                top = trigger.offsetTop + trigger.offsetHeight + offset;
-                left = trigger.offsetLeft + trigger.offsetWidth - tooltip.offsetWidth;
-                break;
-            case 'top-left':
-                top = trigger.offsetTop - tooltip.offsetHeight - offset;
-                left = trigger.offsetLeft;
-                break;
-            case 'top-right':
-                top = trigger.offsetTop - tooltip.offsetHeight - offset;
-                left = trigger.offsetLeft + trigger.offsetWidth - tooltip.offsetWidth;
-                break;
-            default: // 'top-center'
-                top = trigger.offsetTop - tooltip.offsetHeight - offset;
-                left = trigger.offsetLeft + (trigger.offsetWidth - tooltip.offsetWidth) / 2;
-        }
-
-        tooltip.style.position = 'absolute';
-        tooltip.style.top = `${top}px`;
-        tooltip.style.left = `${left}px`;
-    }
-
     _hideTooltip() {
         this.visible = false;
     }
 
     _onEscape(e) {
         if (e.key === 'Escape') {
-            this.visible = false;
+            this._hideTooltip();
         }
+    }
+
+    _positionTooltip() {
+        const trigger = this.querySelector('[slot="trigger"]');
+        const tooltip = this.shadowRoot.querySelector('.tooltip');
+        if (!trigger || !tooltip) return;
+
+        const offset = 12;
+        const arrow = this.getAttribute('arrow');
+        let top = 0, left = 0;
+
+        const { offsetTop, offsetLeft, offsetWidth, offsetHeight } = trigger;
+        const tooltipRect = tooltip.getBoundingClientRect();
+
+        switch (arrow) {
+            case 'top-left':
+                top = offsetTop - tooltipRect.height - offset;
+                left = offsetLeft;
+                break;
+            case 'top-right':
+                top = offsetTop - tooltipRect.height - offset;
+                left = offsetLeft + offsetWidth - tooltipRect.width;
+                break;
+            case 'top-center':
+                top = offsetTop - tooltipRect.height - offset;
+                left = offsetLeft + (offsetWidth - tooltipRect.width) / 2;
+                break;
+            case 'bottom-left':
+                top = offsetTop + offsetHeight + offset;
+                left = offsetLeft;
+                break;
+            case 'bottom-right':
+                top = offsetTop + offsetHeight + offset;
+                left = offsetLeft + offsetWidth - tooltipRect.width;
+                break;
+            case 'bottom-center':
+                top = offsetTop + offsetHeight + offset;
+                left = offsetLeft + (offsetWidth - tooltipRect.width) / 2;
+                break;
+            case 'left':
+                top = offsetTop + (offsetHeight - tooltipRect.height) / 2;
+                left = offsetLeft - tooltipRect.width - offset;
+                break;
+            case 'right':
+                top = offsetTop + (offsetHeight - tooltipRect.height) / 2;
+                left = offsetLeft + offsetWidth + offset;
+                break;
+        }
+
+        tooltip.style.top = `${top}px`;
+        tooltip.style.left = `${left}px`;
     }
 
     render() {
         return html`
             <slot name="trigger"></slot>
-            <div class="tooltip" id="tooltip-content" role="tooltip">
+            <div class="tooltip" role="tooltip">
                 <slot name="content"></slot>
             </div>
-    `;
+        `;
     }
 }
 
