@@ -102,6 +102,14 @@ class Tooltip extends LitElement {
                 top = trigger.offsetTop + trigger.offsetHeight + offset;
                 left = trigger.offsetLeft + trigger.offsetWidth - tooltip.offsetWidth;
                 break;
+            case 'top-left':
+                top = trigger.offsetTop - tooltip.offsetHeight - offset;
+                left = trigger.offsetLeft;
+                break;
+            case 'top-right':
+                top = trigger.offsetTop - tooltip.offsetHeight - offset;
+                left = trigger.offsetLeft + trigger.offsetWidth - tooltip.offsetWidth;
+                break;
             default: // 'top-center'
                 top = trigger.offsetTop - tooltip.offsetHeight - offset;
                 left = trigger.offsetLeft + (trigger.offsetWidth - tooltip.offsetWidth) / 2;
