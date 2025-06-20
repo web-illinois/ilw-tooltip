@@ -17,12 +17,12 @@
         {
             "name": "default",
             "description": "Default tooltip with a link trigger",
-            "text": "<a href=\"javascript:void(0);\" slot=\"trigger\">Hover over me</a>\n        <div slot=\"content\">\n            This is a simple tooltip example.\n        </div>"
+            "text": "<a href=\"javascript:void(0);\" slot=\"trigger\">Hover over me</a>\n <div slot=\"content\">\n This is a simple tooltip example.\n </div>"
         },
         {
             "name": "Bold Text in tooltip",
             "description": "Tooltip with bold text",
-            "text": "<button slot=\"trigger\" role=\"button\">\n <ilw-icon icon=\"home\" size=\"50px\" alt=\"Home\"></ilw-icon></button>\n <div slot=\"content\">\n Home\n </div>"
+            "text": "<a href=\"javascript:void(0);\" slot=\"trigger\">Hover over me</a>\n <div slot=\"content\">\n <strong>Some content in bold.</strong><br>This is a simple tooltip example.\n </div>"
         },
         {
             "name": "Button Trigger",
