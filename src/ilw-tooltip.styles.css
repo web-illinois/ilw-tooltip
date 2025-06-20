@@ -46,6 +46,13 @@
     font: var(--ilw-tooltip--font);
     color: inherit;
 }
+.visually-hidden {
+    position: absolute !important;
+    height: 1px; width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    white-space: nowrap;
+}
 /* ===== Top Center ===== */
 :host([arrow="top-center"]) .tooltip::after {
     left: 50%;

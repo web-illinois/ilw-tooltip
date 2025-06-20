@@ -1,6 +1,3 @@
-// Working version of ilw-tooltip.js that positions the tooltip
-// above the trigger and centers it correctly
-
 import { LitElement, html, css, unsafeCSS } from "lit";
 import styles from './ilw-tooltip.styles.css?inline';
 import './ilw-tooltip.css';
@@ -24,7 +21,8 @@ class Tooltip extends LitElement {
         this.visible = false;
     }
 
-    updated(changedProperties) {
+    connectedCallback() {
+        super.connectedCallback();
         if (!this.hasAttribute('arrow')) {
             this.setAttribute('arrow', 'top-center');
         }
@@ -32,7 +30,23 @@ class Tooltip extends LitElement {
 
     firstUpdated() {
         const trigger = this.querySelector('[slot="trigger"]');
-        if (trigger) {
+        const content = this.querySelector('[slot="content"]');
+
+        if (trigger && content) {
+            const tooltipId = 'tooltip-content-' + Math.random().toString(36).substring(2, 10);
+
+            // Mirror content to aria-describedby using hidden element in light DOM
+            const srText = document.createElement('div');
+            srText.id = tooltipId;
+            srText.className = 'visually-hidden';
+            srText.textContent = content.textContent;
+            this.appendChild(srText);
+
+            trigger.setAttribute('aria-describedby', tooltipId);
+            if (!trigger.hasAttribute('tabindex')) {
+                trigger.setAttribute('tabindex', '0');
+            }
+
             trigger.addEventListener('mouseenter', this._showTooltip.bind(this));
             trigger.addEventListener('mouseleave', this._hideTooltip.bind(this));
             trigger.addEventListener('focus', this._showTooltip.bind(this));
@@ -41,6 +55,7 @@ class Tooltip extends LitElement {
 
         document.addEventListener('keydown', this._onEscape.bind(this));
     }
+
 
     disconnectedCallback() {
         super.disconnectedCallback();
@@ -109,9 +124,7 @@ class Tooltip extends LitElement {
 
     render() {
         return html`
-            <div class="trigger" aria-describedby="tooltip-content" tabindex="0">
-                <slot name="trigger"></slot>
-            </div>
+            <slot name="trigger"></slot>
             <div class="tooltip" id="tooltip-content" role="tooltip">
                 <slot name="content"></slot>
             </div>
