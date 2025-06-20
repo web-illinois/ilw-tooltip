@@ -1,12 +1,16 @@
-import { LitElement, html, unsafeCSS } from "lit";
+// Working version of ilw-tooltip.js that positions the tooltip
+// above the trigger and centers it correctly
+
+import { LitElement, html, css, unsafeCSS } from "lit";
 import styles from './ilw-tooltip.styles.css?inline';
 import './ilw-tooltip.css';
 
 class Tooltip extends LitElement {
-
     static get properties() {
         return {
-            theme: { type: String, attribute: true }
+            theme: { type: String, attribute: true },
+            arrow: { type: String, attribute: true },
+            visible: { type: Boolean, reflect: true }
         };
     }
 
@@ -17,14 +21,101 @@ class Tooltip extends LitElement {
     constructor() {
         super();
         this.theme = '';
+        this.visible = false;
+    }
+
+    updated(changedProperties) {
+        if (!this.hasAttribute('arrow')) {
+            this.setAttribute('arrow', 'top-center');
+        }
+    }
+
+    firstUpdated() {
+        const trigger = this.querySelector('[slot="trigger"]');
+        if (trigger) {
+            trigger.addEventListener('mouseenter', this._showTooltip.bind(this));
+            trigger.addEventListener('mouseleave', this._hideTooltip.bind(this));
+            trigger.addEventListener('focus', this._showTooltip.bind(this));
+            trigger.addEventListener('blur', this._hideTooltip.bind(this));
+        }
+
+        document.addEventListener('keydown', this._onEscape.bind(this));
+    }
+
+    disconnectedCallback() {
+        super.disconnectedCallback();
+        document.removeEventListener('keydown', this._onEscape);
+    }
+
+    async _showTooltip() {
+        this.visible = true;
+        await this.updateComplete;
+        this._positionTooltip();
+    }
+
+    _positionTooltip() {
+        const trigger = this.querySelector('[slot="trigger"]');
+        const tooltip = this.shadowRoot.querySelector('.tooltip');
+        if (!trigger || !tooltip) return;
+
+        const offset = 12;
+        const arrow = this.getAttribute('arrow') || 'top-center';
+
+        const triggerRect = trigger.getBoundingClientRect();
+        const hostRect = this.getBoundingClientRect();
+
+        let top, left;
+
+        switch (arrow) {
+            case 'left':
+                top = trigger.offsetTop + (trigger.offsetHeight - tooltip.offsetHeight) / 2;
+                left = trigger.offsetLeft - tooltip.offsetWidth - offset;
+                break;
+            case 'right':
+                top = trigger.offsetTop + (trigger.offsetHeight - tooltip.offsetHeight) / 2;
+                left = trigger.offsetLeft + trigger.offsetWidth + offset;
+                break;
+            case 'bottom-center':
+                top = trigger.offsetTop + trigger.offsetHeight + offset;
+                left = trigger.offsetLeft + (trigger.offsetWidth - tooltip.offsetWidth) / 2;
+                break;
+            case 'bottom-left':
+                top = trigger.offsetTop + trigger.offsetHeight + offset;
+                left = trigger.offsetLeft;
+                break;
+            case 'bottom-right':
+                top = trigger.offsetTop + trigger.offsetHeight + offset;
+                left = trigger.offsetLeft + trigger.offsetWidth - tooltip.offsetWidth;
+                break;
+            default: // 'top-center'
+                top = trigger.offsetTop - tooltip.offsetHeight - offset;
+                left = trigger.offsetLeft + (trigger.offsetWidth - tooltip.offsetWidth) / 2;
+        }
+
+        tooltip.style.position = 'absolute';
+        tooltip.style.top = `${top}px`;
+        tooltip.style.left = `${left}px`;
+    }
+
+    _hideTooltip() {
+        this.visible = false;
+    }
+
+    _onEscape(e) {
+        if (e.key === 'Escape') {
+            this.visible = false;
+        }
     }
 
     render() {
         return html`
-            <div>
-                <slot></slot>
+            <div class="trigger" aria-describedby="tooltip-content" tabindex="0">
+                <slot name="trigger"></slot>
             </div>
-        `;
+            <div class="tooltip" id="tooltip-content" role="tooltip">
+                <slot name="content"></slot>
+            </div>
+    `;
     }
 }
 

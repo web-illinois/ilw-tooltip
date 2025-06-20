@@ -7,11 +7,66 @@
     <title>Tooltip Component</title>
     <link rel="stylesheet" href="https://cdn.brand.illinois.edu/illinois.css">
     <link rel="stylesheet" href="https://dev.toolkit.illinois.edu/ilw-global/3.0.0-alpha/ilw-global.css">
+    <link rel="stylesheet" href="//cdn.toolkit.illinois.edu/3/toolkit.css">
+    <link rel="stylesheet" href="https://cdn.toolkit.illinois.edu/ilw-icon/1.1.0/ilw-icon.css">
+    <script type="module" src="//cdn.toolkit.illinois.edu/3/toolkit.js"></script>
     <script type="module" src="/src/ilw-tooltip.js"></script>
+    <style>
+        ilw-icon {
+            color: var(--il-blue);
+        }
+    </style>
 </head>
 
 <body style="margin: 0; padding: 0;">
-<ilw-tooltip></ilw-tooltip>
+<ilw-page>
+    <ilw-content width="page">
+<h1>Tooltip</h1>
+        <p>Nestled deep within the tranquil embrace of Whispering Pines, this storied institution stands as a beacon of higher learning and intellectual discovery. Established over a century ago, Whispering Pines College has earned a distinguished reputation for nurturing minds and fostering a community where curiosity thrives.</p>
+<div style="margin: 20px 120px;">
+    <ilw-tooltip>
+        <a href="javascript:void(0);" slot="trigger">Hover over me</a>
+        <div slot="content">
+            <strong>Tooltip content goes here.</strong><br>This is a simple tooltip example.
+        </div>
+    </ilw-tooltip>
+
+    <ilw-tooltip>
+        <a href="javascript:void(0);" slot="trigger">Hover over me</a>
+        <div slot="content">
+            This is a simple tooltip example.
+        </div>
+    </ilw-tooltip>
+    <ilw-tooltip theme="blue" arrow="bottom-center">
+        <button slot="trigger" role="button">
+            <ilw-icon icon="home" size="50px" alt="Home"></ilw-icon></button>
+        <div slot="content">
+            Home
+        </div>
+    </ilw-tooltip>
+    <ilw-tooltip theme="blue" arrow="top-right">
+        <button slot="trigger" role="button">
+            <ilw-icon icon="apply-now" size="50px" alt="Apply Now"></ilw-icon></button>
+        <div slot="content">
+            Apply Now
+        </div>
+    </ilw-tooltip>
+    <ilw-tooltip theme="blue" arrow="bottom-left">
+        <a href="#" slot="trigger">Hover over me</a>
+        <div slot="content">
+            Address Information
+        </div>
+    </ilw-tooltip>
+    <ilw-tooltip theme="blue" arrow="bottom-left">
+        <button slot="trigger" role="button" class="ilw-button">
+            Hover over me</button>
+        <div slot="content">This is additional information that appears when you hover over the button.</div>
+    </ilw-tooltip>
+
+</div>
+    </ilw-content>
+</ilw-page>
+
 </body>
 
 </html>

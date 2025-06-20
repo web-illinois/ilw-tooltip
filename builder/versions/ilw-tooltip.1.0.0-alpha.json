@@ -4,20 +4,31 @@
     "github": "https://github.com/web-illinois/ilw-tooltip/",
     "type": "web component",
     "element-name": "ilw-tooltip",
-    "description": "Description for builder.",
+    "description": "Ilw-tooltip is a popup that provides additional information about a user interface element, such as a button or link, when the mouse hovers over it.",
     "version": "1.0.0-alpha",
-    "date": "06/13/2025",
+    "date": "06/18/2025",
     "css": "https://dev.toolkit.illinois.edu/ilw-tooltip/1.0.0-alpha/ilw-tooltip.css",
     "js": "https://dev.toolkit.illinois.edu/ilw-tooltip/1.0.0-alpha/ilw-tooltip.js",
     "production": false,
     "notes": "",
-    "parent-style": "",
+    "parent-style": "margin: 20px 120px;",
     "samples": [
         {
             "name": "default",
-            "description": "Default information",
-            "text": "<p>Lorem ipsum</p>"
+            "description": "Default tooltip with a link trigger",
+            "text": "<a href=\"javascript:void(0);\" slot=\"trigger\">Hover over me</a>\n        <div slot=\"content\">\n            This is a simple tooltip example.\n        </div>"
+        },
+        {
+            "name": "Button Trigger",
+            "description": "Button trigger with tooltip",
+            "text": "<button slot=\"trigger\" role=\"button\" class=\"ilw-button\">\n Hover over me</button>\n <div slot=\"content\">This is additional information that appears when you hover over the button.</div>"
+        },
+        {
+            "name": "Icon Button Trigger",
+            "description": "Icon button trigger with tooltip",
+            "text": "<button slot=\"trigger\" role=\"button\">\n <ilw-icon icon=\"home\" size=\"50px\" alt=\"Home\"></ilw-icon></button>\n <div slot=\"content\">\n Home\n </div>"
         }
+
     ],
     "attributes-fixed": [],
     "attributes-text": [],
@@ -28,9 +39,23 @@
             "depreciated": false,
             "values": [
                 "",
-                "blue",
-                "orange",
-                "white"
+                "blue"
+            ]
+        },
+        {
+            "name": "arrow",
+            "description": "Position of the arrow and tooltip",
+            "depreciated": false,
+            "values": [
+                "",
+                "top-left",
+                "top-center",
+                "top-right",
+                "left",
+                "right",
+                "bottom-left",
+                "bottom-center",
+                "bottom-right"
             ]
         }
     ],

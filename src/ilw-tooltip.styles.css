@@ -1,9 +1,123 @@
 /* Styleable variables are in the base layer so they can be overridden easily */
 @layer base {
     :host {
-
+        --ilw-tooltip--text-color: var(--ilw-text--color);
+        --ilw-tooltip--background: #fff;
+        --ilw-tooltip--width: 300px;
+        --ilw-tooltip--font: 400 1.125rem/1.667rem var(--il-font-sans);
+        --ilw-tooltip--heading-font: 700 1.125rem/1.667rem var(--il-font-sans);
     }
 }
 
 :host {
+    display: inline-block;
+    position: relative;
+}
+.tooltip {
+    position: absolute;
+    background: var(--ilw-tooltip--background);
+    color: var(--ilw-tooltip--text-color);
+    font: var(--ilw-tooltip--font);
+    border-radius: 0.5rem;
+    box-shadow: 2px 0px 4px 4px rgba(0, 0, 0, 0.1);
+    padding: 8px 12px;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    inline-size: max-content;
+    max-inline-size: var(--ilw-tooltip--width);
+    min-inline-size: min-content;
+    white-space: normal;
+}
+:host([visible]) .tooltip {
+    opacity: 1;
+    pointer-events: auto;
+}
+/* Arrow base */
+.tooltip::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.1));
+}
+::slotted(a) {
+    font: var(--ilw-tooltip--font);
+    color: inherit;
+}
+/* ===== Top Center ===== */
+:host([arrow="top-center"]) .tooltip::after {
+    left: 50%;
+    bottom: -6px;
+    transform: translateX(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid var(--ilw-tooltip--background);
+}
+:host([arrow="top-left"]) .tooltip::after {
+    left: 12px;
+    bottom: -6px;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid var(--ilw-tooltip--background);
+}
+
+/* ===== Top Right ===== */
+:host([arrow="top-right"]) .tooltip {
+    right: 0;
+}
+:host([arrow="top-right"]) .tooltip::after {
+    right: 12px;
+    bottom: -6px;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid var(--ilw-tooltip--background);
+}
+
+/* ===== Left ===== */
+:host([arrow="left"]) .tooltip::after {
+    top: 50%;
+    right: -6px;
+    transform: translateY(-50%);
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-left: 6px solid var(--ilw-tooltip--background);
+}
+
+/* ===== Right ===== */
+:host([arrow="right"]) .tooltip::after {
+    top: 50%;
+    left: -6px;
+    transform: translateY(-50%);
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-right: 6px solid var(--ilw-tooltip--background);
+}
+/* ===== Bottom Center ===== */
+:host([arrow="bottom-center"]) .tooltip::after {
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid var(--ilw-tooltip--background);
+}
+
+/* ===== Bottom Left ===== */
+:host([arrow="bottom-left"]) .tooltip::after {
+    top: -6px;
+    left: 12px;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid var(--ilw-tooltip--background);
+}
+
+/* ===== Bottom Right ===== */
+:host([arrow="bottom-right"]) .tooltip::after {
+    top: -6px;
+    right: 12px;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid var(--ilw-tooltip--background);
 }

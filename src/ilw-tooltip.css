@@ -1,0 +1,8 @@
+ilw-tooltip {
+  &[theme="blue"] {
+    --ilw-tooltip--background: var(--il-blue);
+    p, div, span {
+      color: #ffffff;
+    }
+  }
+}

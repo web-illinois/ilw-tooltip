@@ -11,9 +11,9 @@ Tooltips are typically used to provide context or explanations for elements that
 
 The default color background color is white, there is also a blue option for the background.
 
-The default position for the arrow is bottom left by default, but can be changed.
+The default position for the arrow is top center by default, but can be changed.
 
-There is an optional slot for the tooltip title.
+There is a slot for the tooltip trigger and a slot for the tooltip content.
 
 ### Attributes
 * id: The id of the tooltip is required. This is used to trigger the tooltip from a button or link. The default is `tooltip`. The ID must be unique on the page.
@@ -31,6 +31,47 @@ There is an optional slot for the tooltip title.
 ## Code Example for Tooltip
 
 ```html
+<ilw-tooltip>
+    <button class="ilw-button" slot="trigger" role="button">Hover over me</button>
+    <div slot="content">
+        Address Information
+    </div>
+</ilw-tooltip>
+
+<ilw-tooltip theme="blue" arrow="bottom-left">
+    <a href="#" slot="trigger" role="button">Hover over me</a>
+    <div slot="content">
+        Address Information
+    </div>
+</ilw-tooltip>
+
+<ilw-tooltip theme="blue" arrow="bottom-left">
+    <button slot="trigger" role="button">
+        <ilw-icon size="50px" icon="admissions" alt="Admissions"></ilw-icon></button>
+    <div slot="content">
+        Admissions
+    </div>
+</ilw-tooltip>
+<ilw-tooltip theme="blue" arrow="bottom-center">
+    <button slot="trigger" role="button">
+        <ilw-icon icon="home" size="50px" alt="Home"></ilw-icon></button>
+    <div slot="content">
+        Home
+    </div>
+</ilw-tooltip>
+<ilw-tooltip theme="blue" arrow="bottom-right">
+    <button slot="trigger" role="button">
+        <ilw-icon icon="apply-now" size="50px" alt="Apply Now"></ilw-icon></button>
+    <div slot="content">
+        Apply Now
+    </div>
+</ilw-tooltip>
+<ilw-tooltip>
+<a href="javascript:void(0);" slot="trigger">Hover over me</a>
+<div slot="content">
+    <strong>Tooltip content goes here.</strong><br>This is a simple tooltip example.
+</div>
+</ilw-tooltip>
     
     <ilw-tooltip id="tooltip" theme="blue" arrow="bottom-left">
         <h3 slot="title">Tooltip Title</h3>

@@ -4,9 +4,9 @@
     "github": "https://github.com/web-illinois/ilw-tooltip/",
     "type": "web component",
     "element-name": "ilw-tooltip",
-    "description": "Description for builder.",
-    "purpose": "Imperative mood purpose for builder homepage.",
-    "toolkit-version": "",
-    "production-version": "",
+    "description": "Popup that provides additional information about a button or link when the mouse hovers over it",
+    "purpose": "Popup that provides info when a user hovers over a button or link",
+    "toolkit-version": "1.0",
+    "production-version": "1.0",
     "development-version": "1.0.0-alpha"
 }
