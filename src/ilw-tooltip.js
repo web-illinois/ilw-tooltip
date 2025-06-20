@@ -51,11 +51,27 @@ class Tooltip extends LitElement {
         }
 
         document.addEventListener('keydown', this._onEscape.bind(this));
+        document.addEventListener('pointerdown', this._onDocumentClick.bind(this));
+    }
+
+    _onDocumentClick(e) {
+        const trigger = this.querySelector('[slot="trigger"]');
+        const tooltip = this.shadowRoot.querySelector('.tooltip');
+
+        if (this.visible && trigger && tooltip) {
+            const clickedInsideTrigger = trigger.contains(e.target);
+            const clickedInsideTooltip = tooltip.contains(e.target);
+
+            if (!clickedInsideTrigger && !clickedInsideTooltip) {
+                this._hideTooltip();
+            }
+        }
     }
 
     disconnectedCallback() {
         super.disconnectedCallback();
         document.removeEventListener('keydown', this._onEscape);
+        document.removeEventListener('pointerdown', this._onDocumentClick);
     }
 
     async _showTooltip() {
