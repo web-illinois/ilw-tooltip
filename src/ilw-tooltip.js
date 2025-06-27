@@ -19,6 +19,8 @@ class Tooltip extends LitElement {
         super();
         this.theme = '';
         this.visible = false;
+
+        this._tooltipId = 'tooltip-' + Math.random().toString(36).substring(2, 10);
     }
 
     connectedCallback() {
@@ -29,8 +31,19 @@ class Tooltip extends LitElement {
     }
     firstUpdated() {
         const trigger = this.querySelector('[slot="trigger"]');
+        const content = this.querySelector('[slot="content"]');
 
-        if (trigger) {
+        if (trigger && content) {
+            // Assign id to content
+            if (!content.id) {
+                content.id = this._tooltipId;
+            }
+
+            // Set aria-describedby on trigger
+            if (!trigger.hasAttribute('aria-describedby')) {
+                trigger.setAttribute('aria-describedby', content.id);
+            }
+
             trigger.setAttribute('tabindex', trigger.getAttribute('tabindex') || '0');
 
             trigger.addEventListener('mouseenter', this._showTooltip.bind(this));
