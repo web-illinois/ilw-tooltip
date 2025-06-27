@@ -8,7 +8,6 @@ class Tooltip extends LitElement {
             theme: { type: String, attribute: true },
             arrow: { type: String, attribute: true },
             visible: { type: Boolean, reflect: true },
-            id: { type: String, reflect: true }
         };
     }
 
@@ -20,11 +19,6 @@ class Tooltip extends LitElement {
         super();
         this.theme = '';
         this.visible = false;
-        this.id = ''
-
-        if (!this.id) {
-            this.id = 'tooltip-' + Math.random().toString(36).substring(2, 10);
-        }
     }
 
     connectedCallback() {
@@ -35,11 +29,8 @@ class Tooltip extends LitElement {
     }
     firstUpdated() {
         const trigger = this.querySelector('[slot="trigger"]');
-        const content = this.querySelector('[slot="content"]');
-        const tooltipId = this.id;
 
-        if (trigger && content && tooltipId) {
-            trigger.setAttribute('aria-describedby', tooltipId);
+        if (trigger) {
             trigger.setAttribute('tabindex', trigger.getAttribute('tabindex') || '0');
 
             trigger.addEventListener('mouseenter', this._showTooltip.bind(this));
@@ -142,7 +133,7 @@ class Tooltip extends LitElement {
     render() {
         return html`
             <slot name="trigger"></slot>
-            <div class="tooltip" id=${this.id} role="tooltip">
+            <div class="tooltip" role="tooltip">
                 <slot name="content"></slot>
             </div>
         `;
