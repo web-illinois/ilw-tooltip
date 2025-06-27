@@ -146,7 +146,7 @@ class Tooltip extends LitElement {
     render() {
         return html`
             <slot name="trigger"></slot>
-            <div class="tooltip" role="tooltip">
+            <div class="tooltip" role="tooltip" aria-hidden=${!this.visible}>
                 <slot name="content"></slot>
             </div>
         `;
