@@ -7,7 +7,8 @@ class Tooltip extends LitElement {
         return {
             theme: { type: String, attribute: true },
             arrow: { type: String, attribute: true },
-            visible: { type: Boolean, reflect: true }
+            visible: { type: Boolean, reflect: true },
+            id: { type: String, reflect: true }
         };
     }
 
@@ -19,6 +20,11 @@ class Tooltip extends LitElement {
         super();
         this.theme = '';
         this.visible = false;
+        this.id = ''
+
+        if (!this.id) {
+            this.id = 'tooltip-' + Math.random().toString(36).substring(2, 10);
+        }
     }
 
     connectedCallback() {
@@ -27,20 +33,12 @@ class Tooltip extends LitElement {
             this.setAttribute('arrow', 'top-center');
         }
     }
-
     firstUpdated() {
         const trigger = this.querySelector('[slot="trigger"]');
         const content = this.querySelector('[slot="content"]');
+        const tooltipId = this.id;
 
-        if (trigger && content) {
-            // Create accessible label
-            const tooltipId = 'tooltip-content-' + Math.random().toString(36).substring(2, 10);
-            const srText = document.createElement('div');
-            srText.id = tooltipId;
-            srText.className = 'visually-hidden';
-            srText.textContent = content.textContent;
-            this.appendChild(srText);
-
+        if (trigger && content && tooltipId) {
             trigger.setAttribute('aria-describedby', tooltipId);
             trigger.setAttribute('tabindex', trigger.getAttribute('tabindex') || '0');
 
@@ -144,7 +142,7 @@ class Tooltip extends LitElement {
     render() {
         return html`
             <slot name="trigger"></slot>
-            <div class="tooltip" role="tooltip">
+            <div class="tooltip" id=${this.id} role="tooltip">
                 <slot name="content"></slot>
             </div>
         `;
