@@ -12,7 +12,7 @@
     "js": "https://dev.toolkit.illinois.edu/ilw-tooltip/1.0.0-alpha/ilw-tooltip.js",
     "production": false,
     "notes": "",
-    "parent-style": "margin: 20px 120px;",
+    "parent-style": "margin: auto; padding: 20px; max-width: 1200px;",
     "samples": [
         {
             "name": "default",
