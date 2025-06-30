@@ -56,6 +56,10 @@ There is a slot for the tooltip trigger and a slot for the tooltip content.
 </ilw-tooltip>
     
 ```
+## Accessibility Notes and Use
+
+When placing tooltips, ensure that they do not obscure important content or navigation elements. Tooltips should be used to enhance the user experience by providing additional context without overwhelming the user.
+The arrow position can be adjusted to ensure that the tooltip does not cover the element it is describing or get cut off by the edge of the viewport. Be sure to test on mobile.
 
 ## External References
 - [WCAG Content on Hover or Focus](https://www.w3.org/WAI/WCAG22/Understanding/content-on-hover-or-focus.html)
