@@ -34,26 +34,25 @@ class Tooltip extends LitElement {
         const content = this.querySelector('[slot="content"]');
 
         if (trigger && content) {
-            // Assign id to content
             if (!content.id) {
                 content.id = this._tooltipId;
             }
 
-            // Set aria-describedby on trigger
             if (!trigger.hasAttribute('aria-describedby')) {
                 trigger.setAttribute('aria-describedby', content.id);
             }
 
             trigger.setAttribute('tabindex', trigger.getAttribute('tabindex') || '0');
 
+            // Mouse and keyboard triggers
             trigger.addEventListener('mouseenter', this._showTooltip.bind(this));
-            trigger.addEventListener('mouseleave', this._hideTooltip.bind(this));
+            trigger.addEventListener('mouseleave', this._maybeHideTooltip.bind(this));
             trigger.addEventListener('focus', this._showTooltip.bind(this));
-            trigger.addEventListener('blur', this._hideTooltip.bind(this));
+            trigger.addEventListener('blur', this._maybeHideTooltip.bind(this));
         }
 
         document.addEventListener('keydown', this._onEscape.bind(this));
-        document.addEventListener('pointerdown', this._onDocumentClick.bind(this));
+        document.addEventListener('pointerdown', this._onDocumentClick.bind(this));//handle clicks outside the tooltip on mobile
     }
 
     _onDocumentClick(e) {
@@ -90,6 +89,20 @@ class Tooltip extends LitElement {
         if (e.key === 'Escape') {
             this._hideTooltip();
         }
+    }
+
+    _maybeHideTooltip() {
+        // Delay to allow blur/focus transitions (e.g., tabbing)
+        requestAnimationFrame(() => {
+            const trigger = this.querySelector('[slot="trigger"]');
+
+            const isHovered = trigger.matches(':hover');
+            const isFocused = document.activeElement === trigger;
+
+            if (!isHovered && !isFocused) {
+                this._hideTooltip();
+            }
+        });
     }
 
     _positionTooltip() {
