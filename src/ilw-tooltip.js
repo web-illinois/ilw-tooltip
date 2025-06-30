@@ -6,7 +6,7 @@ class Tooltip extends LitElement {
     static get properties() {
         return {
             theme: { type: String, attribute: true },
-            arrow: { type: String, attribute: true },
+            arrow: { type: String, reflect: true },
             visible: { type: Boolean, reflect: true },
         };
     }
@@ -19,16 +19,11 @@ class Tooltip extends LitElement {
         super();
         this.theme = '';
         this.visible = false;
+        this.arrow = 'top-center'; // Default arrow position
 
         this._tooltipId = 'tooltip-' + Math.random().toString(36).substring(2, 10);
     }
 
-    connectedCallback() {
-        super.connectedCallback();
-        if (!this.hasAttribute('arrow')) {
-            this.setAttribute('arrow', 'top-center');
-        }
-    }
     firstUpdated() {
         const trigger = this.querySelector('[slot="trigger"]');
         const content = this.querySelector('[slot="content"]');
