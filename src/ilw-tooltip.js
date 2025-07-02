@@ -44,6 +44,7 @@ class Tooltip extends LitElement {
             trigger.addEventListener('mouseleave', this._maybeHideTooltip.bind(this));
             trigger.addEventListener('focus', this._showTooltip.bind(this));
             trigger.addEventListener('blur', this._maybeHideTooltip.bind(this));
+            trigger.addEventListener('touchstart', this._onTriggerTouch.bind(this));
         }
 
         document.addEventListener('keydown', this._onEscape.bind(this));
@@ -83,6 +84,15 @@ class Tooltip extends LitElement {
     _onEscape(e) {
         if (e.key === 'Escape') {
             this._hideTooltip();
+        }
+    }
+
+    _onTriggerTouch(e) {
+        // Prevent it from immediately triggering _onDocumentClick
+        e.stopPropagation();
+
+        if (!this.visible) {
+            this._showTooltip();
         }
     }
 
