@@ -20,6 +20,9 @@ class Tooltip extends LitElement {
         this.theme = '';
         this.visible = false;
         this.arrow = 'top-center'; // Default arrow position
+        this._longPressTimer = null;
+        this._touchMoved = false;
+        this._ignoreNextPointerDown = false;
 
         this._tooltipId = 'tooltip-' + Math.random().toString(36).substring(2, 10);
     }
@@ -44,7 +47,11 @@ class Tooltip extends LitElement {
             trigger.addEventListener('mouseleave', this._maybeHideTooltip.bind(this));
             trigger.addEventListener('focus', this._showTooltip.bind(this));
             trigger.addEventListener('blur', this._maybeHideTooltip.bind(this));
-            trigger.addEventListener('touchstart', this._onTriggerTouch.bind(this));
+            //mobile touch events
+            trigger.addEventListener('touchstart', this._onTouchStart.bind(this), { passive: false });
+            trigger.addEventListener('touchmove', this._onTouchMove.bind(this), { passive: false });
+            trigger.addEventListener('touchend', this._onTouchEnd.bind(this), { passive: false });
+            trigger.addEventListener('touchcancel', this._onTouchCancel.bind(this), { passive: false });
         }
 
         document.addEventListener('keydown', this._onEscape.bind(this));
@@ -55,15 +62,25 @@ class Tooltip extends LitElement {
         const trigger = this.querySelector('[slot="trigger"]');
         const tooltip = this.shadowRoot.querySelector('.tooltip');
 
-        if (this.visible && trigger && tooltip) {
-            const clickedInsideTrigger = trigger.contains(e.target);
-            const clickedInsideTooltip = tooltip.contains(e.target);
+        // Avoid closing if we intentionally opened it
+        if (this._ignoreNextPointerDown) {
+            this._ignoreNextPointerDown = false;
+            return;
+        }
 
-            if (!clickedInsideTrigger && !clickedInsideTooltip) {
-                this._hideTooltip();
+        const clickedInsideTrigger = trigger && trigger.contains(e.target);
+        const clickedInsideTooltip = tooltip && tooltip.contains(e.target);
+
+        if (!clickedInsideTrigger && !clickedInsideTooltip) {
+            this._hideTooltip();
+
+            // Manually blur trigger on mobile if still focused
+            if (document.activeElement === trigger) {
+                trigger.blur();
             }
         }
     }
+
 
     disconnectedCallback() {
         super.disconnectedCallback();
@@ -73,13 +90,18 @@ class Tooltip extends LitElement {
 
     async _showTooltip() {
         this.visible = true;
+        this._ignoreNextPointerDown = true;
         await this.updateComplete;
         this._positionTooltip();
     }
 
     _hideTooltip() {
-        this.visible = false;
+        if (this.visible) {
+            this.visible = false;
+            this._ignoreNextPointerDown = false;
+        }
     }
+
 
     _onEscape(e) {
         if (e.key === 'Escape') {
@@ -87,14 +109,47 @@ class Tooltip extends LitElement {
         }
     }
 
-    _onTriggerTouch(e) {
-        // Prevent it from immediately triggering _onDocumentClick
-        e.stopPropagation();
+    _onTouchStart(e) {
+        this._touchMoved = false;
 
-        if (!this.visible) {
+        // Always clear previous timer
+        if (this._longPressTimer) {
+            clearTimeout(this._longPressTimer);
+            this._longPressTimer = null;
+        }
+
+        this._longPressTimer = setTimeout(() => {
             this._showTooltip();
+
+            // Prevents tap propagation that would immediately hide tooltip
+            e.preventDefault();
+            e.stopPropagation();
+        }, 500); // long-press threshold
+    }
+
+
+    _onTouchMove(e) {
+        this._touchMoved = true;
+        if (this._longPressTimer) {
+            clearTimeout(this._longPressTimer);
+            this._longPressTimer = null;
         }
     }
+
+    _onTouchEnd(e) {
+        if (this._longPressTimer) {
+            clearTimeout(this._longPressTimer);
+            this._longPressTimer = null;
+        }
+    }
+
+    _onTouchCancel(e) {
+        if (this._longPressTimer) {
+            clearTimeout(this._longPressTimer);
+            this._longPressTimer = null;
+        }
+    }
+
 
     _maybeHideTooltip() {
         // Delay to allow blur/focus transitions (e.g., tabbing)
