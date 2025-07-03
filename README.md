@@ -25,23 +25,23 @@ There is a slot for the tooltip trigger and a slot for the tooltip content.
 ```html
 <ilw-tooltip>
     <a href="javascript:void(0);" slot="trigger">Hover over me</a>
-    <div slot="content">
+    <span slot="content">
         This is a simple tooltip example.
-    </div>
+    </span>
 </ilw-tooltip>
 
  <ilw-tooltip arrow="bottom-center">
     <a href="javascript:void(0);" slot="trigger">Hover over me</a>
-    <div slot="content">
+    <span slot="content">
         <strong>Text can be bold.</strong><br>This is a tooltip example.
-    </div>
+    </span>
 </ilw-tooltip>
 
 <ilw-tooltip theme="blue" arrow="bottom-left">
     <a href="#" slot="trigger" role="button">Hover over me</a>
-    <div slot="content">
+    <span slot="content">
         Buttons can be used to trigger the tooltip.
-    </div>
+    </span>
 </ilw-tooltip>
 ```
 ## Code Example with Icon Button
@@ -50,9 +50,9 @@ There is a slot for the tooltip trigger and a slot for the tooltip content.
 <ilw-tooltip theme="blue" arrow="bottom-left">
     <button slot="trigger" role="button">
         <ilw-icon size="50px" icon="admissions" alt="Admissions"></ilw-icon></button>
-    <div slot="content">
+    <span slot="content">
         Admissions
-    </div>
+    </span>
 </ilw-tooltip>
     
 ```

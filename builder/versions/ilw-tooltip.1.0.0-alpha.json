@@ -17,17 +17,17 @@
         {
             "name": "default",
             "description": "Default tooltip with a link trigger",
-            "text": "<a href=\"javascript:void(0);\" slot=\"trigger\">Hover over me</a>\n <div slot=\"content\">\n This is a simple tooltip example.\n </div>"
+            "text": "<a href=\"javascript:void(0);\" slot=\"trigger\">Hover over me</a>\n <span slot=\"content\">\n This is a simple tooltip example.\n </span>"
         },
         {
             "name": "Bold Text in tooltip",
             "description": "Tooltip with bold text",
-            "text": "<a href=\"javascript:void(0);\" slot=\"trigger\">Hover over me</a>\n <div slot=\"content\">\n <strong>Some content in bold.</strong><br>This is a simple tooltip example.\n </div>"
+            "text": "<a href=\"javascript:void(0);\" slot=\"trigger\">Hover over me</a>\n <span slot=\"content\">\n <strong>Some content in bold.</strong><br>This is a simple tooltip example.\n </span>"
         },
         {
             "name": "Button Trigger",
             "description": "Button trigger with tooltip",
-            "text": "<button slot=\"trigger\" role=\"button\" class=\"ilw-button\">\n Hover over me</button>\n <div slot=\"content\">This is additional information that appears when you hover over the button.</div>"
+            "text": "<button slot=\"trigger\" role=\"button\" class=\"ilw-button\">\n Hover over me</button>\n <span slot=\"content\">This is additional information that appears when you hover over the button.</span>"
         }
 
     ],
