@@ -8,5 +8,5 @@
     "purpose": "Popup that provides info when a user hovers over a button or link",
     "toolkit-version": "1.0",
     "production-version": "1.0",
-    "development-version": "1.0.0-alpha"
+    "development-version": "1.0-alpha"
 }

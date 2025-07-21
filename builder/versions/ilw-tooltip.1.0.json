@@ -1,0 +1,67 @@
+{
+    "title": "Tooltip",
+    "tag": "ilw-tooltip",
+    "github": "https://github.com/web-illinois/ilw-tooltip/",
+    "type": "web component",
+    "element-name": "ilw-tooltip",
+    "description": "Ilw-tooltip is a popup that provides additional information about a user interface element, such as a button or link, when the mouse hovers over it.",
+    "builder-version": "1.0",
+    "version": "1.0.0",
+    "date": "07/21/2025",
+    "css": "https://cdn.toolkit.illinois.edu/ilw-tooltip/1.0/ilw-tooltip.css",
+    "js": "https://cdn.toolkit.illinois.edu/ilw-tooltip/1.0/ilw-tooltip.js",
+    "production": true,
+    "notes": "",
+    "parent-style": "margin: auto; padding: 20px; max-width: 1200px;",
+    "samples": [
+        {
+            "name": "default",
+            "description": "Default tooltip with a link trigger",
+            "text": "<a href=\"javascript:void(0);\" slot=\"trigger\">Hover over me</a>\n <span slot=\"content\">\n This is a simple tooltip example.\n </span>"
+        },
+        {
+            "name": "Bold Text in tooltip",
+            "description": "Tooltip with bold text",
+            "text": "<a href=\"javascript:void(0);\" slot=\"trigger\">Hover over me</a>\n <span slot=\"content\">\n <strong>Some content in bold.</strong><br>This is a simple tooltip example.\n </span>"
+        },
+        {
+            "name": "Button Trigger",
+            "description": "Button trigger with tooltip",
+            "text": "<button slot=\"trigger\" role=\"button\" class=\"ilw-button\">\n Hover over me</button>\n <span slot=\"content\">This is additional information that appears when you hover over the button.</span>"
+        }
+
+    ],
+    "attributes-fixed": [],
+    "attributes-text": [],
+    "attributes": [
+        {
+            "name": "theme",
+            "description": "Color theme used",
+            "depreciated": false,
+            "values": [
+                "",
+                "blue"
+            ]
+        },
+        {
+            "name": "arrow",
+            "description": "Position of the arrow and tooltip",
+            "depreciated": false,
+            "values": [
+                "",
+                "top-left",
+                "top-center",
+                "top-right",
+                "left",
+                "right",
+                "bottom-left",
+                "bottom-center",
+                "bottom-right"
+            ]
+        }
+    ],
+    "classes-fixed": [],
+    "classes": [],
+    "css-variables": [
+    ]
+}
