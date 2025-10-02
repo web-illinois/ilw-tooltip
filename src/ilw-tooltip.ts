@@ -2,7 +2,6 @@ import { LitElement, html, css, unsafeCSS } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 // @ts-ignore
 import styles from './ilw-tooltip.styles.css?inline';
-import './ilw-tooltip.css';
 
 type ArrowPosition =
     | 'top-left'
