@@ -9,12 +9,17 @@
     <link rel="stylesheet" href="https://dev.toolkit.illinois.edu/ilw-global/latest/ilw-global.css">
     <link rel="stylesheet" href="//cdn.toolkit.illinois.edu/3/toolkit.css">
     <link rel="stylesheet" href="https://cdn.toolkit.illinois.edu/ilw-icon/1.1.0/ilw-icon.css">
-    <script type="module" src="//cdn.toolkit.illinois.edu/3/toolkit.js"></script>
+    <script type="module" src="https://cdn.toolkit.illinois.edu/ilw-icon/1.1.0/ilw-icon.js"></script>
     <script type="module" src="/src/ilw-tooltip.ts"></script>
     <style>
         ilw-icon {
             color: var(--il-blue);
         }
+        #variations > * {
+          margin: 100px 80px !important;
+          display: inline-block;
+        }
+
     </style>
 </head>
 
@@ -22,50 +27,79 @@
 <ilw-page>
     <ilw-content width="page">
 <h1>Tooltip</h1>
-<div style="margin: 20px 120px;">
-    <ilw-tooltip>
+
+    <div id="variations" style="margin: 20px 120px;">
+
+    <ilw-tooltip id="tooltip">
         <a href="javascript:void(0);" slot="trigger">Hover over me</a>
         <span slot="content">
             <strong>Some content in bold.</strong><br>This is a simple tooltip example.
         </span>
     </ilw-tooltip>
 
-    <ilw-tooltip>
+    <ilw-tooltip id="tooltip2">
         <a href="javascript:void(0);" slot="trigger">Hover over me</a>
         <span slot="content">
             This is a simple tooltip example.
         </span>
     </ilw-tooltip>
-    <ilw-tooltip theme="blue" arrow="bottom-center">
+
+    <ilw-tooltip id="tooltip3">
         <button slot="trigger" role="button">
             <ilw-icon icon="home" size="50px" alt="Home"></ilw-icon></button>
         <span slot="content">
             Home
         </span>
     </ilw-tooltip>
-    <ilw-tooltip theme="blue" arrow="top-right">
-        <button slot="trigger" role="button">
-            <ilw-icon icon="apply-now" size="50px" alt="Apply Now"></ilw-icon></button>
-        <span slot="content">
-            Apply Now
-        </span>
-    </ilw-tooltip>
-    <ilw-tooltip theme="blue" arrow="bottom-left">
-        <a href="#" slot="trigger">Hover over me</a>
-        <span slot="content">
-            Address Information
-        </span>
-    </ilw-tooltip>
-    <ilw-tooltip theme="blue" arrow="bottom-center">
+
+    <ilw-tooltip id="tooltip4">
         <button slot="trigger" role="button" class="ilw-button">
             Hover over me</button>
         <span slot="content">This is additional information that appears when you hover over the button.</span>
     </ilw-tooltip>
-
-</div>
+    </div>
 
     </ilw-content>
 </ilw-page>
+<script type="module">
+  import { createVariations } from "@illinois-toolkit/ilw-core";
+  import Tooltip from "../src/ilw-tooltip.ts";
+
+  createVariations(document.getElementById("variations"), Tooltip, {
+      theme: [
+        undefined,
+        "blue"
+      ],
+      arrow: [
+        undefined,
+        "top-left",
+        "top-center",
+        "top-right",
+        "left",
+        "right",
+        "bottom-left",
+        "bottom-center",
+        "bottom-right"
+      ],
+      visible: [true] // Force all variations to be open
+    },
+    ["tooltip", "tooltip2", "tooltip3", "tooltip4"],
+  );
+  // Force all tooltips to be visible after creation
+  setTimeout(() => {
+    const allTooltips = document.querySelectorAll('ilw-tooltip');
+    allTooltips.forEach(tooltip => {
+      // Set the visible property
+      tooltip.visible = true;
+
+      // Trigger positioning by simulating mouseenter
+      const trigger = tooltip.querySelector('[slot="trigger"]');
+      if (trigger) {
+        trigger.dispatchEvent(new Event('mouseenter'));
+      }
+    });
+  }, 500);
+</script>
 
 </body>
 

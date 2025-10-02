@@ -1,35 +1,47 @@
-import { LitElement, html, css, unsafeCSS } from "lit";
+import { LitElement, html, css, unsafeCSS } from 'lit';
+import { customElement, property, query } from 'lit/decorators.js';
+// @ts-ignore
 import styles from './ilw-tooltip.styles.css?inline';
-import './ilw-tooltip.css';
 
-class Tooltip extends LitElement {
-    static get properties() {
-        return {
-            theme: { type: String, attribute: true },
-            arrow: { type: String, reflect: true },
-            visible: { type: Boolean, reflect: true },
-        };
-    }
+type ArrowPosition =
+    | 'top-left'
+    | 'top-center'
+    | 'top-right'
+    | 'bottom-left'
+    | 'bottom-center'
+    | 'bottom-right'
+    | 'left'
+    | 'right';
 
-    static get styles() {
-        return unsafeCSS(styles);
-    }
+@customElement('ilw-tooltip')
+export default class Tooltip extends LitElement {
+    @property({ type: String, attribute: true })
+    theme = '';
+
+    @property({ type: String, reflect: true })
+    arrow: ArrowPosition = 'top-center';
+
+    @property({ type: Boolean, reflect: true })
+    visible = false;
+
+    @query('.tooltip')
+    private tooltipElement?: HTMLElement;
+
+    private _longPressTimer: ReturnType<typeof setTimeout> | null = null;
+    private _touchMoved = false;
+    private _ignoreNextPointerDown = false;
+    private _tooltipId: string;
+
+    static override styles = unsafeCSS(styles);
 
     constructor() {
         super();
-        this.theme = '';
-        this.visible = false;
-        this.arrow = 'top-center'; // Default arrow position
-        this._longPressTimer = null;
-        this._touchMoved = false;
-        this._ignoreNextPointerDown = false;
-
         this._tooltipId = 'tooltip-' + Math.random().toString(36).substring(2, 10);
     }
 
-    firstUpdated() {
-        const trigger = this.querySelector('[slot="trigger"]');
-        const content = this.querySelector('[slot="content"]');
+    override firstUpdated(): void {
+        const trigger = this.querySelector('[slot="trigger"]') as HTMLElement;
+        const content = this.querySelector('[slot="content"]') as HTMLElement;
 
         if (trigger && content) {
             if (!content.id) {
@@ -47,7 +59,8 @@ class Tooltip extends LitElement {
             trigger.addEventListener('mouseleave', this._maybeHideTooltip.bind(this));
             trigger.addEventListener('focus', this._showTooltip.bind(this));
             trigger.addEventListener('blur', this._maybeHideTooltip.bind(this));
-            //mobile touch events
+
+            // Mobile touch events
             trigger.addEventListener('touchstart', this._onTouchStart.bind(this), { passive: false });
             trigger.addEventListener('touchmove', this._onTouchMove.bind(this), { passive: false });
             trigger.addEventListener('touchend', this._onTouchEnd.bind(this), { passive: false });
@@ -55,12 +68,18 @@ class Tooltip extends LitElement {
         }
 
         document.addEventListener('keydown', this._onEscape.bind(this));
-        document.addEventListener('pointerdown', this._onDocumentClick.bind(this));//handle clicks outside the tooltip on mobile
+        document.addEventListener('pointerdown', this._onDocumentClick.bind(this));
     }
 
-    _onDocumentClick(e) {
-        const trigger = this.querySelector('[slot="trigger"]');
-        const tooltip = this.shadowRoot.querySelector('.tooltip');
+    override disconnectedCallback(): void {
+        super.disconnectedCallback();
+        document.removeEventListener('keydown', this._onEscape.bind(this));
+        document.removeEventListener('pointerdown', this._onDocumentClick.bind(this));
+    }
+
+    private _onDocumentClick(e: PointerEvent): void {
+        const trigger = this.querySelector('[slot="trigger"]') as HTMLElement;
+        const tooltip = this.tooltipElement;
 
         // Avoid closing if we intentionally opened it
         if (this._ignoreNextPointerDown) {
@@ -68,8 +87,8 @@ class Tooltip extends LitElement {
             return;
         }
 
-        const clickedInsideTrigger = trigger && trigger.contains(e.target);
-        const clickedInsideTooltip = tooltip && tooltip.contains(e.target);
+        const clickedInsideTrigger = trigger && trigger.contains(e.target as Node);
+        const clickedInsideTooltip = tooltip && tooltip.contains(e.target as Node);
 
         if (!clickedInsideTrigger && !clickedInsideTooltip) {
             this._hideTooltip();
@@ -81,35 +100,27 @@ class Tooltip extends LitElement {
         }
     }
 
-
-    disconnectedCallback() {
-        super.disconnectedCallback();
-        document.removeEventListener('keydown', this._onEscape);
-        document.removeEventListener('pointerdown', this._onDocumentClick);
-    }
-
-    async _showTooltip() {
+    private async _showTooltip(): Promise<void> {
         this.visible = true;
         this._ignoreNextPointerDown = true;
         await this.updateComplete;
         this._positionTooltip();
     }
 
-    _hideTooltip() {
+    private _hideTooltip(): void {
         if (this.visible) {
             this.visible = false;
             this._ignoreNextPointerDown = false;
         }
     }
 
-
-    _onEscape(e) {
+    private _onEscape(e: KeyboardEvent): void {
         if (e.key === 'Escape') {
             this._hideTooltip();
         }
     }
 
-    _onTouchStart(e) {
+    private _onTouchStart(e: TouchEvent): void {
         this._touchMoved = false;
 
         // Always clear previous timer
@@ -127,8 +138,7 @@ class Tooltip extends LitElement {
         }, 500); // long-press threshold
     }
 
-
-    _onTouchMove(e) {
+    private _onTouchMove(e: TouchEvent): void {
         this._touchMoved = true;
         if (this._longPressTimer) {
             clearTimeout(this._longPressTimer);
@@ -136,27 +146,26 @@ class Tooltip extends LitElement {
         }
     }
 
-    _onTouchEnd(e) {
+    private _onTouchEnd(e: TouchEvent): void {
         if (this._longPressTimer) {
             clearTimeout(this._longPressTimer);
             this._longPressTimer = null;
         }
     }
 
-    _onTouchCancel(e) {
+    private _onTouchCancel(e: TouchEvent): void {
         if (this._longPressTimer) {
             clearTimeout(this._longPressTimer);
             this._longPressTimer = null;
         }
     }
 
-
-    _maybeHideTooltip() {
+    private _maybeHideTooltip(): void {
         // Delay to allow blur/focus transitions (e.g., tabbing)
         requestAnimationFrame(() => {
-            const trigger = this.querySelector('[slot="trigger"]');
+            const trigger = this.querySelector('[slot="trigger"]') as HTMLElement;
 
-            const isHovered = trigger.matches(':hover');
+            const isHovered = trigger?.matches(':hover');
             const isFocused = document.activeElement === trigger;
 
             if (!isHovered && !isFocused) {
@@ -165,14 +174,15 @@ class Tooltip extends LitElement {
         });
     }
 
-    _positionTooltip() {
-        const trigger = this.querySelector('[slot="trigger"]');
-        const tooltip = this.shadowRoot.querySelector('.tooltip');
+    private _positionTooltip(): void {
+        const trigger = this.querySelector('[slot="trigger"]') as HTMLElement;
+        const tooltip = this.tooltipElement;
         if (!trigger || !tooltip) return;
 
         const offset = 12;
-        const arrow = this.getAttribute('arrow');
-        let top = 0, left = 0;
+        const arrow = this.getAttribute('arrow') as ArrowPosition;
+        let top = 0;
+        let left = 0;
 
         const { offsetTop, offsetLeft, offsetWidth, offsetHeight } = trigger;
         const tooltipRect = tooltip.getBoundingClientRect();
@@ -216,14 +226,18 @@ class Tooltip extends LitElement {
         tooltip.style.left = `${left}px`;
     }
 
-    render() {
+    override render() {
         return html`
-            <slot name="trigger"></slot>
-            <div class="tooltip" role="tooltip" aria-hidden=${!this.visible}>
-                <slot name="content"></slot>
-            </div>
-        `;
+      <slot name="trigger"></slot>
+      <div class="tooltip" role="tooltip" aria-hidden=${!this.visible}>
+        <slot name="content"></slot>
+      </div>
+    `;
     }
 }
 
-customElements.define('ilw-tooltip', Tooltip);
+declare global {
+    interface HTMLElementTagNameMap {
+        'ilw-tooltip': Tooltip;
+    }
+}

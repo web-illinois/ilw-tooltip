@@ -1,8 +1,8 @@
 /* Styleable variables are in the base layer so they can be overridden easily */
 @layer base {
     :host {
-        --ilw-tooltip--text-color: var(--ilw-text--color);
-        --ilw-tooltip--background: #fff;
+        --ilw-tooltip--text-color: var(--ilw-color--text);
+        --ilw-tooltip--background: var(--ilw-color--background);
         --ilw-tooltip--width: 300px;
         --ilw-tooltip--font: 400 1.125rem/1.667rem var(--il-font-sans);
         --ilw-tooltip--heading-font: 700 1.125rem/1.667rem var(--il-font-sans);
