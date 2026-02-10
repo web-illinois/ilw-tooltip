@@ -3,9 +3,9 @@
     :host {
         --ilw-tooltip--text-color: var(--ilw-color--text);
         --ilw-tooltip--background: var(--ilw-color--background);
-        --ilw-tooltip--width: 300px;
-        --ilw-tooltip--font: 400 1.125rem/1.667rem var(--il-font-sans);
-        --ilw-tooltip--heading-font: 700 1.125rem/1.667rem var(--il-font-sans);
+        --ilw-tooltip--width: 200px;
+        --ilw-tooltip--font: 400 1rem/1.375rem var(--il-font-sans);
+        --ilw-tooltip--heading-font: 700 1rem/1.375rem var(--il-font-sans);
     }
 }
 
@@ -29,6 +29,10 @@
     max-inline-size: var(--ilw-tooltip--width);
     min-inline-size: min-content;
     white-space: normal;
+    max-width: min(var(--ilw-tooltip--width), calc(100vw - 16px));
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 :host([visible]) .tooltip {
     opacity: 1;
