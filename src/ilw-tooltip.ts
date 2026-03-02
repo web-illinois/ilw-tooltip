@@ -185,6 +185,12 @@ export default class Tooltip extends LitElement {
         let left = 0;
 
         const { offsetTop, offsetLeft, offsetWidth, offsetHeight } = trigger;
+
+        // Reset horizontal positioning so the initial measurement is reliable
+        tooltip.style.left = '0px';
+        tooltip.style.right = 'auto';
+
+        // Measure tooltip (it should already be rendered when this runs)
         const tooltipRect = tooltip.getBoundingClientRect();
 
         switch (arrow) {
@@ -224,6 +230,33 @@ export default class Tooltip extends LitElement {
 
         tooltip.style.top = `${top}px`;
         tooltip.style.left = `${left}px`;
+        tooltip.style.right = 'auto';
+
+        // --- Viewport clamp (mobile + narrow layouts) ---
+        const margin = 8; // breathing room from screen edges
+        const viewportWidth = document.documentElement.clientWidth;
+
+        // Measure after applying the computed left/top
+        const rectAfter = tooltip.getBoundingClientRect();
+
+        // Compute how much we need to nudge horizontally (in viewport pixels)
+        let shiftX = 0;
+
+        // If it overflows left, push right
+        if (rectAfter.left < margin) {
+            shiftX += margin - rectAfter.left;
+        }
+
+        // If it overflows right, push left
+        if (rectAfter.right > viewportWidth - margin) {
+            shiftX -= rectAfter.right - (viewportWidth - margin);
+        }
+
+        if (shiftX !== 0) {
+            const currentLeft = Number.parseFloat(tooltip.style.left || '0') || 0;
+            tooltip.style.left = `${currentLeft + shiftX}px`;
+            tooltip.style.right = 'auto';
+        }
     }
 
     override render() {
