@@ -7,7 +7,7 @@
   "builder-information": {
     "element-name": "ilw-tooltip",
     "addon-html": "",
-    "parent-style": "margin: auto; padding: 20px; max-width: 1200px;"
+    "parent-style": "margin: auto; padding: 80px; max-width: 1200px;"
   },
   "added-components": [],
   "samples": [
