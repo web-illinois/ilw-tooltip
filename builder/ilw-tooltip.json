@@ -1,12 +1,26 @@
 {
-    "title": "Tooltip",
-    "tag": "ilw-tooltip",
-    "github": "https://github.com/web-illinois/ilw-tooltip/",
-    "type": "web component",
-    "element-name": "ilw-tooltip",
-    "description": "Popup that provides additional information about a button or link when the mouse hovers over it",
-    "purpose": "Popup that provides info when a user hovers over a button or link",
-    "toolkit-version": "1.2",
-    "production-version": "1.2",
-    "development-version": "1.0-alpha"
+  "title": "Tooltip",
+  "id": "ilw-tooltip",
+  "type": "Web Component",
+  "repository-name": "ilw-tooltip",
+  "description": "Provide brief supporting information when a visitor hovers over or focuses on a button, link, or other control.",
+  "purpose": "Popup that provides info when a user hovers over a button or link",
+  "customtemplates": [],
+  "versions": [
+    {
+      "name": "1.0",
+      "notes": "",
+      "template": "1.0"
+    },
+    {
+      "name": "1.1",
+      "notes": "",
+      "template": "1.0"
+    },
+    {
+      "name": "1.2",
+      "notes": "",
+      "template": "1.0"
+    }
+  ]
 }
